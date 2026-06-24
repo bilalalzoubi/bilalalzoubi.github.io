@@ -36,9 +36,12 @@
   ======================================================== -->
 </head>
 
-<body class="index-page">
+<body class="index-page theme-dark">
+
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode"><i class="bi bi-sun"></i></button>
 
   <header id="header" class="header dark-background d-flex flex-column">
+    <canvas class="constellation" id="sideBg"></canvas>
     <i class="header-toggle d-xl-none bi bi-list"></i>
 
     <div class="profile-img">
@@ -69,6 +72,12 @@
       </ul>
     </nav>
 
+    <div class="sidebar-credit">
+      <p>© <span id="credYear">2026</span> Bilal Alzoubi. All rights reserved.</p>
+      <p>Built with <span class="heart">❤</span> for mechatronics.</p>
+      <p>Last updated: <span id="lastUpdated">2026-06-25</span></p>
+    </div>
+
   </header>
 
   <main class="main">
@@ -76,30 +85,27 @@
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
 
+      <canvas class="constellation" id="heroBg"></canvas>
+
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <h2>Bilal Alzoubi</h2>
         <p>I'm a <span class="typed" data-typed-items="Mechatronics Engineering Student, Biomedical Applications, Control Systems, Embedded IoT, Automation">Mechatronics Engineering Student</span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
 
-        <div class="ctrl-demo">
-          <div class="ctrl-label">Tune the controller &mdash; PD step response</div>
-          <div class="ctrl-sliders">
-            <div class="ctrl-slider">
-              <div class="row"><span>Proportional gain &middot; Kp</span><span class="val" id="kpVal">230</span></div>
-              <input type="range" id="kp" min="0" max="400" value="230" step="1">
+        <div class="bio-demo">
+          <div class="bio-label">Live biosignal monitor</div>
+          <div class="bio-controls">
+            <div class="bio-seg">
+              <button type="button" id="sigEcg" class="on">ECG</button>
+              <button type="button" id="sigEeg">EEG</button>
             </div>
-            <div class="ctrl-slider">
-              <div class="row"><span>Derivative gain &middot; Kd</span><span class="val" id="kdVal">160</span></div>
-              <input type="range" id="kd" min="0" max="300" value="160" step="1">
+            <div class="bio-rate">
+              <i class="bi bi-heart-pulse" id="hicon" aria-hidden="true"></i>
+              <input type="range" id="bpm" min="40" max="180" value="72" step="1" aria-label="Heart rate (BPM)">
+              <span class="out" id="bpmOut">72 BPM</span>
             </div>
           </div>
-          <div class="ctrl-metrics">
-            <div class="ctrl-chip"><div class="k">Overshoot</div><div class="v" id="mOver">&ndash;</div></div>
-            <div class="ctrl-chip"><div class="k">Settling time</div><div class="v" id="mSettle">&ndash;</div></div>
-            <div class="ctrl-chip"><div class="k">Damping &zeta;</div><div class="v" id="mZeta">&ndash;</div></div>
-          </div>
-          <div class="ctrl-rail"><div class="target"></div><div class="block" id="ctrlBlock"></div></div>
-          <canvas class="ctrl-plot" id="ctrlPlot" width="680" height="220"></canvas>
-          <div class="ctrl-caption">An interactive control-tuning demo &mdash; echoing the system identification and controller design (PID / LQR / MPC) in my Beta-Zero line follower.</div>
+          <canvas class="bio-plot" id="bioPlot" width="660" height="180"></canvas>
+          <div class="bio-caption">A live biosignal monitor &mdash; a nod to NeuroGuard (in-ear EEG) and my interest in ECG &amp; cardiac monitoring.</div>
         </div>
       </div>
 
@@ -541,59 +547,98 @@
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
 
-  <!-- Interactive hero: PD control tuning playground -->
+  <!-- Theme toggle -->
   <script>
   (function () {
-    var kpEl = document.getElementById("kp"), kdEl = document.getElementById("kd");
-    var cv = document.getElementById("ctrlPlot");
-    if (!cv || !kpEl || !kdEl) return;
-    var ctx = cv.getContext("2d"), W = cv.width, H = cv.height;
-    var block = document.getElementById("ctrlBlock");
-    var kpVal = document.getElementById("kpVal"), kdVal = document.getElementById("kdVal");
-    var mOver = document.getElementById("mOver"), mSettle = document.getElementById("mSettle"), mZeta = document.getElementById("mZeta");
-    var dt = 0.004, T = 2.5, N = Math.round(T / dt), sp = 1, yMax = 2.2;
-    var data = [], peak = 0, settle = T;
-
-    function X(t) { return 42 + (W - 64) * (t / T); }
-    function Y(v) { return H - 28 - (H - 48) * (v / yMax); }
-
-    function sim() {
-      var Kp = +kpEl.value, Kd = +kdEl.value, kp = Kp * 0.2, kd = Kd * 0.06;
-      var x = 0, v = 0; data = []; peak = 0;
-      for (var i = 0; i <= N; i++) { data.push(x); if (x > peak) peak = x; var a = kp * (sp - x) - kd * v; v += a * dt; x += v * dt; }
-      settle = 0;
-      for (var j = N; j >= 0; j--) { if (Math.abs(data[j] - sp) > 0.02) { settle = (j + 1) * dt; break; } }
-      var zeta = kp > 0 ? kd / (2 * Math.sqrt(kp)) : 0;
-      kpVal.textContent = Kp; kdVal.textContent = Kd;
-      mOver.textContent = Math.max(0, (peak - sp) * 100).toFixed(0) + "%";
-      mSettle.textContent = (settle >= T ? ">2.5" : settle.toFixed(2)) + " s";
-      mZeta.textContent = zeta.toFixed(2);
-      draw(null);
+    var body = document.body, btn = document.getElementById("themeToggle");
+    function apply(t) {
+      body.classList.remove("theme-dark", "theme-light");
+      body.classList.add(t === "light" ? "theme-light" : "theme-dark");
+      if (btn) btn.innerHTML = t === "light" ? '<i class="bi bi-moon-stars"></i>' : '<i class="bi bi-sun"></i>';
     }
+    var saved = null;
+    try { saved = localStorage.getItem("theme"); } catch (e) {}
+    apply(saved || "dark");
+    if (btn) btn.addEventListener("click", function () {
+      var now = body.classList.contains("theme-light") ? "dark" : "light";
+      apply(now);
+      try { localStorage.setItem("theme", now); } catch (e) {}
+    });
+  })();
+  </script>
 
-    function draw(progress) {
-      ctx.clearRect(0, 0, W, H);
-      ctx.strokeStyle = "rgba(120,170,255,0.08)"; ctx.lineWidth = 1;
-      for (var g = 0; g <= 4; g++) { var yy = Y(g * yMax / 4); ctx.beginPath(); ctx.moveTo(42, yy); ctx.lineTo(W - 22, yy); ctx.stroke(); }
-      ctx.strokeStyle = "rgba(46,230,166,0.55)"; ctx.setLineDash([5, 5]);
-      ctx.beginPath(); ctx.moveTo(42, Y(1)); ctx.lineTo(W - 22, Y(1)); ctx.stroke(); ctx.setLineDash([]);
-      ctx.strokeStyle = "#6db8ff"; ctx.lineWidth = 2; ctx.beginPath();
-      for (var i = 0; i <= N; i++) { var px = X(i * dt), py = Y(data[i]); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }
-      ctx.stroke();
-      if (progress != null) { var idx = Math.min(N, Math.round(progress * N)); ctx.fillStyle = "#2ee6a6"; ctx.beginPath(); ctx.arc(X(idx * dt), Y(data[idx]), 4, 0, 7); ctx.fill(); }
+  <!-- Constellation background -->
+  <script>
+  (function () {
+    var canvases = [].slice.call(document.querySelectorAll(".constellation"));
+    if (!canvases.length) return;
+    var systems = canvases.map(function (cv) { return { cv: cv, ctx: cv.getContext("2d"), pts: [] }; });
+    function size(s) {
+      var r = s.cv.parentNode.getBoundingClientRect();
+      s.cv.width = Math.max(1, r.width); s.cv.height = Math.max(1, r.height);
+      var n = Math.max(16, Math.min(55, Math.round(s.cv.width * s.cv.height / 16000)));
+      s.pts = [];
+      for (var i = 0; i < n; i++) s.pts.push({ x: Math.random() * s.cv.width, y: Math.random() * s.cv.height, vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22 });
     }
-
-    var t0 = null;
-    function frame(ts) {
-      if (t0 == null) t0 = ts;
-      var p = ((ts - t0) / 2600) % 1, idx = Math.min(N, Math.round(p * N)), val = data[idx];
-      draw(p);
-      if (block) block.style.left = (Math.max(0, Math.min(1.25, val / sp)) * 80) + "%";
+    systems.forEach(size);
+    window.addEventListener("resize", function () { systems.forEach(size); });
+    function frame() {
+      systems.forEach(function (s) {
+        var ctx = s.ctx, W = s.cv.width, H = s.cv.height, pts = s.pts, i, j;
+        ctx.clearRect(0, 0, W, H);
+        for (i = 0; i < pts.length; i++) { var p = pts[i]; p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1; }
+        for (i = 0; i < pts.length; i++) for (j = i + 1; j < pts.length; j++) {
+          var a = pts[i], b = pts[j], dx = a.x - b.x, dy = a.y - b.y, d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 118) { ctx.strokeStyle = "rgba(120,170,255," + (0.13 * (1 - d / 118)) + ")"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+        }
+        ctx.fillStyle = "rgba(150,190,255,0.5)";
+        for (i = 0; i < pts.length; i++) { ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, 1.5, 0, 7); ctx.fill(); }
+      });
       requestAnimationFrame(frame);
     }
+    requestAnimationFrame(frame);
+  })();
+  </script>
 
-    kpEl.addEventListener("input", sim); kdEl.addEventListener("input", sim);
-    sim(); requestAnimationFrame(frame);
+  <!-- Live biosignal monitor -->
+  <script>
+  (function () {
+    var cv = document.getElementById("bioPlot");
+    if (!cv) return;
+    var ctx = cv.getContext("2d"), W = cv.width, H = cv.height;
+    var bpmEl = document.getElementById("bpm"), bpmOut = document.getElementById("bpmOut"), hicon = document.getElementById("hicon");
+    var bEcg = document.getElementById("sigEcg"), bEeg = document.getElementById("sigEeg"), mode = "ecg";
+    if (bEcg) bEcg.addEventListener("click", function () { mode = "ecg"; bEcg.classList.add("on"); bEeg.classList.remove("on"); });
+    if (bEeg) bEeg.addEventListener("click", function () { mode = "eeg"; bEeg.classList.add("on"); bEcg.classList.remove("on"); });
+    if (bpmEl) bpmEl.addEventListener("input", function () { bpmOut.textContent = bpmEl.value + " BPM"; });
+    function gauss(x, m, s) { return Math.exp(-((x - m) * (x - m)) / (2 * s * s)); }
+    function ecgWave(p) { var y = 0; y += 0.10 * gauss(p, 0.18, 0.025); y -= 0.06 * gauss(p, 0.37, 0.010); y += 0.85 * gauss(p, 0.40, 0.010); y -= 0.18 * gauss(p, 0.43, 0.012); y += 0.22 * gauss(p, 0.62, 0.045); return y; }
+    function eegWave(p, t) { return 0.32 * Math.sin(2 * Math.PI * p * 6) + 0.18 * Math.sin(2 * Math.PI * p * 11 + t) + 0.10 * Math.sin(2 * Math.PI * p * 19 + t * 1.7); }
+    var pxPerSec = 150, mid = H * 0.52, amp = H * 0.40, start = null;
+    function draw(now) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = "rgba(120,170,255,0.07)"; ctx.lineWidth = 1;
+      for (var gx = 0; gx <= W; gx += 40) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke(); }
+      for (var gy = 0; gy <= H; gy += 30) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke(); }
+      var bpm = +bpmEl.value, cycle = 60 / bpm;
+      ctx.strokeStyle = mode === "ecg" ? "#2ee6a6" : "#6db8ff"; ctx.lineWidth = 2; ctx.beginPath();
+      for (var x = 0; x < W; x++) { var t = now - (W - x) / pxPerSec; var ph = ((t / cycle) % 1 + 1) % 1; var vv = mode === "ecg" ? ecgWave(ph) : eegWave(ph, t * 2); var y = mid - vv * amp; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+      ctx.stroke();
+      var phR = ((now / cycle) % 1 + 1) % 1, lead = mode === "ecg" ? ecgWave(phR) : eegWave(phR, now * 2);
+      ctx.fillStyle = mode === "ecg" ? "#aaffe0" : "#bcd8ff"; ctx.beginPath(); ctx.arc(W - 1, mid - lead * amp, 3.5, 0, 7); ctx.fill();
+      if (hicon) hicon.style.transform = "scale(" + (1 + 0.32 * Math.max(0, ecgWave(phR))).toFixed(3) + ")";
+    }
+    function frame(ts) { if (start == null) start = ts; draw((ts - start) / 1000); requestAnimationFrame(frame); }
+    requestAnimationFrame(frame);
+  })();
+  </script>
+
+  <!-- Sidebar credit dates -->
+  <script>
+  (function () {
+    var y = document.getElementById("credYear"); if (y) y.textContent = new Date().getFullYear();
+    var lu = document.getElementById("lastUpdated");
+    if (lu) { var d = new Date(document.lastModified); lu.textContent = isNaN(d.getTime()) ? "2026-06-25" : d.toISOString().slice(0, 10); }
   })();
   </script>
 
