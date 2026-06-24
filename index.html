@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Bilal Alzoubi — Mechatronics Systems Integrator</title>
+  <meta content="Bilal Alzoubi — Mechatronics Engineering student at the University of Jordan. Systems integration across IoT, robotics, control systems, BMS, and IIoT." name="description">
+  <meta content="Bilal Alzoubi, Mechatronics, Systems Integration, IoT, Robotics, Control Systems, BMS, IIoT, ESP32, Amman, Jordan" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: iPortfolio
+  * Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
+  * Updated: Jun 29 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header dark-background d-flex flex-column">
+    <i class="header-toggle d-xl-none bi bi-list"></i>
+
+    <div class="profile-img">
+      <img src="assets/img/my-profile-img.jpg" alt="" class="img-fluid rounded-circle">
+    </div>
+
+    <a href="index.html" class="logo d-flex align-items-center justify-content-center">
+      <!-- Uncomment the line below if you also wish to use an image logo -->
+      <!-- <img src="assets/img/logo.png" alt=""> -->
+      <h1 class="sitename">Bilal Alzoubi</h1>
+    </a>
+
+    <div class="social-links text-center">
+      <a href="https://www.linkedin.com/in/bilal-al-zoubi-960828211" target="_blank" rel="noopener" class="linkedin"><i class="bi bi-linkedin"></i></a>
+      <a href="https://github.com/bilalalzoubi" target="_blank" rel="noopener" class="github"><i class="bi bi-github"></i></a>
+      <a href="https://huggingface.co/bilalalzoubi" target="_blank" rel="noopener" class="huggingface"><i class="bi bi-robot"></i></a>
+      <a href="mailto:bilal.alzoubi33@gmail.com" class="email"><i class="bi bi-envelope"></i></a>
+    </div>
+
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="#hero" class="active"><i class="bi bi-house navicon"></i>Home</a></li>
+        <li><a href="#about"><i class="bi bi-person navicon"></i> About</a></li>
+        <li><a href="#skills"><i class="bi bi-bar-chart navicon"></i> Skills</a></li>
+        <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i> Resume</a></li>
+        <li><a href="#portfolio"><i class="bi bi-images navicon"></i> Projects</a></li>
+        <li><a href="#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
+      </ul>
+    </nav>
+
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section dark-background">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <h2>Bilal Alzoubi</h2>
+        <p>I'm a <span class="typed" data-typed-items="Mechatronics Engineering Student, Biomedical Applications, Control Systems, Embedded IoT, Automation">Mechatronics Engineering Student</span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
+
+        <div class="ctrl-demo">
+          <div class="ctrl-label">Tune the controller &mdash; PD step response</div>
+          <div class="ctrl-sliders">
+            <div class="ctrl-slider">
+              <div class="row"><span>Proportional gain &middot; Kp</span><span class="val" id="kpVal">230</span></div>
+              <input type="range" id="kp" min="0" max="400" value="230" step="1">
+            </div>
+            <div class="ctrl-slider">
+              <div class="row"><span>Derivative gain &middot; Kd</span><span class="val" id="kdVal">160</span></div>
+              <input type="range" id="kd" min="0" max="300" value="160" step="1">
+            </div>
+          </div>
+          <div class="ctrl-metrics">
+            <div class="ctrl-chip"><div class="k">Overshoot</div><div class="v" id="mOver">&ndash;</div></div>
+            <div class="ctrl-chip"><div class="k">Settling time</div><div class="v" id="mSettle">&ndash;</div></div>
+            <div class="ctrl-chip"><div class="k">Damping &zeta;</div><div class="v" id="mZeta">&ndash;</div></div>
+          </div>
+          <div class="ctrl-rail"><div class="target"></div><div class="block" id="ctrlBlock"></div></div>
+          <canvas class="ctrl-plot" id="ctrlPlot" width="680" height="220"></canvas>
+          <div class="ctrl-caption">An interactive control-tuning demo &mdash; echoing the system identification and controller design (PID / LQR / MPC) in my Beta-Zero line follower.</div>
+        </div>
+      </div>
+
+    </section><!-- /Hero Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>About</h2>
+        <p>Fourth-year Mechatronics Engineering student at the University of Jordan, with project work in biosignal acquisition, signal processing, and embedded IoT.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4 justify-content-center">
+          <div class="col-lg-4">
+            <img src="assets/img/my-profile-img.jpg" class="img-fluid" alt="Bilal Alzoubi">
+          </div>
+          <div class="col-lg-8 content">
+            <h2>Biomedical applications, control systems &amp; embedded IoT.</h2>
+            <p class="fst-italic py-3">
+              I'm a fourth-year Mechatronics Engineering student at the University of Jordan. Most of my work sits in
+              biosignal acquisition, signal processing, and embedded IoT, with a strong base in MATLAB/Simulink modeling
+              and system identification.
+            </p>
+            <div class="row">
+              <div class="col-lg-6">
+                <ul>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>B.Sc. Mechatronics Engineering</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>University:</strong> <span>University of Jordan</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>GPA:</strong> <span>3.0 / 4.0</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Expected Graduation:</strong> <span>2027</span></li>
+                </ul>
+              </div>
+              <div class="col-lg-6">
+                <ul>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Location:</strong> <span>Amman, Jordan</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>bilal.alzoubi33@gmail.com</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Focus:</strong> <span>Biomedical, Control, Embedded IoT, Automation</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Languages:</strong> <span>Arabic (native), English (TOEFL iBT 83)</span></li>
+                </ul>
+              </div>
+            </div>
+            <p class="py-3">
+              I'm currently leading a four-student team on NeuroGuard, a wearable in-ear EEG seizure-detection device
+              we're developing for the Hakeem Academy Annual Competition 2026 — ESP32-based biosignal acquisition with a
+              Firebase IoT alert pipeline. I'm keen to extend these biosignal skills toward ECG and cardiac-monitoring
+              research. I mostly work with ESP32/Arduino, MATLAB/Simulink modeling, and system identification, and I enjoy
+              the scientific report writing that comes with multi-student research teams.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills section light-background">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Skills</h2>
+        <p>The tools and disciplines I reach for when taking a system from concept to a working build.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4 skill-groups">
+
+          <div class="col-lg-6">
+
+            <div class="skill-group">
+              <h4>Embedded &amp; IoT</h4>
+              <div class="skill-tags">
+                <span>ESP32 / Arduino</span><span>Embedded C++</span><span>Firebase / IoT / MQTT</span>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <h4>Control &amp; Modeling</h4>
+              <div class="skill-tags">
+                <span>Control systems (PID / LQR / MPC)</span><span>System identification</span><span>MATLAB / Simulink</span>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <h4>Programming</h4>
+              <div class="skill-tags">
+                <span>C++</span><span>Python</span><span>Java</span><span>MATLAB</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-lg-6">
+
+            <div class="skill-group">
+              <h4>Signals &amp; Instrumentation</h4>
+              <div class="skill-tags">
+                <span>Signal processing</span><span>Wheatstone bridge &amp; instrumentation</span><span>Power electronics</span>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <h4>Tools &amp; Fabrication</h4>
+              <div class="skill-tags">
+                <span>Multisim</span><span>Creo (CAD)</span><span>3D printing / PDMS</span><span>Hands-on soldering</span><span>LaTeX</span>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <h4>Professional</h4>
+              <div class="skill-tags">
+                <span>Technical writing</span><span>Teamwork &amp; leadership</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Skills Section -->
+
+    <!-- Resume Section -->
+    <section id="resume" class="resume section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Resume</h2>
+        <p>My education, the student committees I've contributed to, and my certifications.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row">
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <h3 class="resume-title">Summary</h3>
+
+            <div class="resume-item pb-0">
+              <h4>Bilal Alzoubi</h4>
+              <p><em>Fourth-year Mechatronics Engineering student focused on biosignal acquisition, signal processing, and embedded IoT, with a solid base in MATLAB/Simulink modeling and system identification.</em></p>
+              <ul>
+                <li>Amman, Jordan</li>
+                <li>bilal.alzoubi33@gmail.com</li>
+                <li>linkedin.com/in/bilal-al-zoubi-960828211</li>
+              </ul>
+            </div><!-- End Resume Item -->
+
+            <h3 class="resume-title">Education</h3>
+            <div class="resume-item">
+              <h4>B.Sc. Mechatronics Engineering</h4>
+              <h5>2022 - 2027 (expected)</h5>
+              <p><em>University of Jordan, Amman &middot; GPA 3.0 / 4.0</em></p>
+              <p>Relevant coursework: Control Systems, Electronics &amp; Lab Electronics, Digital Logic, Programming (C++, Java, MATLAB), and Sensors &amp; Signal Processing.</p>
+            </div><!-- End Resume Item -->
+
+            <div class="resume-item">
+              <h4>High School</h4>
+              <h5>2019 - 2022</h5>
+              <p><em>Al-Omareyah School, Amman &middot; GPA 90.35</em></p>
+            </div><!-- End Resume Item -->
+
+          </div>
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+            <h3 class="resume-title">Experience &amp; Activities</h3>
+            <div class="resume-item">
+              <h4>Activities Coordinator</h4>
+              <h5>2025 - Present</h5>
+              <p><em>Zmex &mdash; Mechatronics Engineering Academic Committee, University of Jordan</em></p>
+              <ul>
+                <li>Organize academic and technical events for engineering students.</li>
+                <li>Coordinate workshops and student activities related to mechatronics.</li>
+              </ul>
+            </div><!-- End Resume Item -->
+
+            <div class="resume-item">
+              <h4>Social Media Coordinator</h4>
+              <h5>2024 - 2025</h5>
+              <p><em>IEEE RAS UJ &mdash; Robotics &amp; Automation Society</em></p>
+              <ul>
+                <li>Supported event planning, workshops, and STEM outreach programs.</li>
+                <li>Collaborated with a diverse team to increase student participation in robotics activities.</li>
+              </ul>
+            </div><!-- End Resume Item -->
+
+            <h3 class="resume-title">Certificates</h3>
+            <div class="resume-item">
+              <ul>
+                <li>MATLAB Onramp</li>
+                <li>MATLAB App Building Onramp</li>
+                <li>Hands-On Soldering</li>
+                <li>TOEFL iBT (83)</li>
+              </ul>
+            </div><!-- End Resume Item -->
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Resume Section -->
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio section light-background">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Projects</h2>
+        <p>Selected engineering and research work across biomedical IoT, robotics, control, and power systems.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+
+          <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
+            <li data-filter="*" class="filter-active">All</li>
+            <li data-filter=".filter-bio">Biomedical &amp; Instrumentation</li>
+            <li data-filter=".filter-robotics">Robotics &amp; Control</li>
+            <li data-filter=".filter-iot">IoT &amp; Embedded</li>
+            <li data-filter=".filter-power">Power &amp; Automation</li>
+          </ul><!-- End Portfolio Filters -->
+
+          <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-bio">
+              <div class="portfolio-content h-100">
+                <img src="assets/img/portfolio/app-1.jpg" class="img-fluid" alt="NeuroGuard wearable in-ear EEG device">
+                <div class="portfolio-info">
+                  <h4>NeuroGuard</h4>
+                  <p>Wearable in-ear EEG seizure-detection device, in development for the Hakeem Academy Annual Competition 2026 (leading a 4-student team). BioAmp EXG Pill + ESP32 acquisition, a 3D-printed PDMS earpiece with Ag/AgCl electrodes, and a Firebase IoT alert pipeline.</p>
+                  <a href="assets/img/portfolio/app-1.jpg" title="NeuroGuard" data-gallery="portfolio-gallery-bio" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                </div>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-robotics">
+              <div class="portfolio-content h-100">
+                <img src="assets/img/portfolio/product-1.jpg" class="img-fluid" alt="Beta-Zero line-following robot">
+                <div class="portfolio-info">
+                  <h4>Beta-Zero Line-Following Robot</h4>
+                  <p>Autonomous line follower on an ESP32 platform (16-element IR array, VNH2SP30 driver). A controller comparison study (PID, LQR, MPC) with full motor system identification in MATLAB/Simulink. Digital Signals course project, with ongoing work toward a paper.</p>
+                  <a href="assets/img/portfolio/product-1.jpg" title="Beta-Zero Line-Following Robot" data-gallery="portfolio-gallery-robotics" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                </div>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-robotics">
+              <div class="portfolio-content h-100">
+                <img src="assets/img/portfolio/product-3.jpg" class="img-fluid" alt="Air levitation control system">
+                <div class="portfolio-info">
+                  <h4>Air Levitation Control System</h4>
+                  <p>Nonlinear ping-pong-ball levitation rig: modeled the plant, ran system identification in MATLAB/Simulink, designed a PID controller, and validated stable real-time levitation with an Arduino and IR sensors.</p>
+                  <a href="assets/img/portfolio/product-3.jpg" title="Air Levitation Control System" data-gallery="portfolio-gallery-robotics" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                </div>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-iot">
+              <div class="portfolio-content h-100">
+                <img src="assets/img/portfolio/app-3.jpg" class="img-fluid" alt="CNC plotter machine">
+                <div class="portfolio-info">
+                  <h4>CNC Plotter</h4>
+                  <p>A microcontroller-driven CNC plotter that draws shapes, built for the Embedded Systems Laboratory.</p>
+                  <a href="assets/img/portfolio/app-3.jpg" title="CNC Plotter" data-gallery="portfolio-gallery-iot" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                </div>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-iot">
+              <div class="portfolio-content h-100">
+                <img src="assets/img/portfolio/app-2.jpg" class="img-fluid" alt="Industrial environment monitoring IoT system">
+                <div class="portfolio-info">
+                  <h4>Industrial Environment Monitoring IoT</h4>
+                  <p>A 5-sensor IoT system (ESP32 + DHT22, BMP280, MPU-6050, MQ-135) tracking temperature, humidity, pressure, vibration, and air quality, with a real-time cloud dashboard over MQTT and RC signal-conditioning circuits. Transducer Technologies course project.</p>
+                  <a href="assets/img/portfolio/app-2.jpg" title="Industrial Environment Monitoring IoT" data-gallery="portfolio-gallery-iot" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                </div>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-power">
+              <div class="portfolio-content h-100">
+                <img src="assets/img/portfolio/product-2.jpg" class="img-fluid" alt="Conveyor digital twin">
+                <div class="portfolio-info">
+                  <h4>Conveyor Digital Twin</h4>
+                  <p>A digital twin and semi-automated priority-fill conveyor control system for Jordania Food Industries, developed after an on-site factory visit (team project).</p>
+                  <a href="assets/img/portfolio/product-2.jpg" title="Conveyor Digital Twin" data-gallery="portfolio-gallery-power" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                </div>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-power">
+              <div class="portfolio-content h-100">
+                <img src="assets/img/portfolio/branding-1.jpg" class="img-fluid" alt="PV-battery DC nanogrid simulation">
+                <div class="portfolio-info">
+                  <h4>PV&ndash;Battery DC Nanogrid (10 kW)</h4>
+                  <p>A 10 kW PV-battery DC nanogrid designed and simulated in MATLAB/Simulink with cascaded PI control (inner current / outer voltage loops). Boost and bidirectional Class-C converters with Bode-based design (60° phase margin). Power Electronics course project.</p>
+                  <a href="assets/img/portfolio/branding-1.jpg" title="PV-Battery DC Nanogrid" data-gallery="portfolio-gallery-power" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                </div>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-bio">
+              <div class="portfolio-content h-100">
+                <img src="assets/img/portfolio/branding-2.jpg" class="img-fluid" alt="Load-cell body mass scale">
+                <div class="portfolio-info">
+                  <h4>Human Body Mass Scale Meter</h4>
+                  <p>A load-cell precision body scale (0&ndash;120 kg, ±0.05 kg) with Wheatstone-bridge signal conditioning and Multisim simulation. Engineering Measurement &amp; Signal Processing course project.</p>
+                  <a href="assets/img/portfolio/branding-2.jpg" title="Human Body Mass Scale Meter" data-gallery="portfolio-gallery-bio" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                </div>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+          </div><!-- End Portfolio Container -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Portfolio Section -->
+
+
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Contact</h2>
+        <p>Open to research collaborations, internships, and interesting hardware problems. The fastest way to reach me is email.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-5">
+
+            <div class="info-wrap">
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
+                <i class="bi bi-geo-alt flex-shrink-0"></i>
+                <div>
+                  <h3>Location</h3>
+                  <p>Amman, Jordan</p>
+                </div>
+              </div><!-- End Info Item -->
+
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
+                <i class="bi bi-envelope flex-shrink-0"></i>
+                <div>
+                  <h3>Email</h3>
+                  <p><a href="mailto:bilal.alzoubi33@gmail.com">bilal.alzoubi33@gmail.com</a></p>
+                </div>
+              </div><!-- End Info Item -->
+
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
+                <i class="bi bi-link-45deg flex-shrink-0"></i>
+                <div>
+                  <h3>Profiles</h3>
+                  <p>
+                    <a href="https://www.linkedin.com/in/bilal-al-zoubi-960828211" target="_blank" rel="noopener">LinkedIn</a> &middot;
+                    <a href="https://github.com/bilalalzoubi" target="_blank" rel="noopener">GitHub</a> &middot;
+                    <a href="https://huggingface.co/bilalalzoubi" target="_blank" rel="noopener">Hugging Face</a>
+                  </p>
+                </div>
+              </div><!-- End Info Item -->
+
+              <iframe src="https://www.google.com/maps?q=Amman,Jordan&output=embed" frameborder="0" style="border:0; width: 100%; height: 270px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
+
+          <div class="col-lg-7">
+            <div class="info-wrap h-100 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+              <h3>Get in touch</h3>
+              <p class="py-2">
+                Whether it's a project in IoT, robotics, control systems, or biomedical signal processing — or just a question
+                about something on this site — I'd be glad to hear from you. Drop me an email and I'll get back to you.
+              </p>
+              <div class="text-center text-lg-start mt-3">
+                <a href="mailto:bilal.alzoubi33@gmail.com?subject=Hello%20Bilal" class="btn-email">
+                  <i class="bi bi-envelope-fill me-2"></i> Send me an email
+                </a>
+              </div>
+            </div>
+          </div><!-- End Contact CTA -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Contact Section -->
+
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container">
+      <div class="copyright text-center ">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">Bilal Alzoubi</strong> <span>All Rights Reserved</span></p>
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> | <a href="https://bootstrapmade.com/tools/">DevTools</a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/typed.js/typed.umd.js"></script>
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+  <!-- Interactive hero: PD control tuning playground -->
+  <script>
+  (function () {
+    var kpEl = document.getElementById("kp"), kdEl = document.getElementById("kd");
+    var cv = document.getElementById("ctrlPlot");
+    if (!cv || !kpEl || !kdEl) return;
+    var ctx = cv.getContext("2d"), W = cv.width, H = cv.height;
+    var block = document.getElementById("ctrlBlock");
+    var kpVal = document.getElementById("kpVal"), kdVal = document.getElementById("kdVal");
+    var mOver = document.getElementById("mOver"), mSettle = document.getElementById("mSettle"), mZeta = document.getElementById("mZeta");
+    var dt = 0.004, T = 2.5, N = Math.round(T / dt), sp = 1, yMax = 2.2;
+    var data = [], peak = 0, settle = T;
+
+    function X(t) { return 42 + (W - 64) * (t / T); }
+    function Y(v) { return H - 28 - (H - 48) * (v / yMax); }
+
+    function sim() {
+      var Kp = +kpEl.value, Kd = +kdEl.value, kp = Kp * 0.2, kd = Kd * 0.06;
+      var x = 0, v = 0; data = []; peak = 0;
+      for (var i = 0; i <= N; i++) { data.push(x); if (x > peak) peak = x; var a = kp * (sp - x) - kd * v; v += a * dt; x += v * dt; }
+      settle = 0;
+      for (var j = N; j >= 0; j--) { if (Math.abs(data[j] - sp) > 0.02) { settle = (j + 1) * dt; break; } }
+      var zeta = kp > 0 ? kd / (2 * Math.sqrt(kp)) : 0;
+      kpVal.textContent = Kp; kdVal.textContent = Kd;
+      mOver.textContent = Math.max(0, (peak - sp) * 100).toFixed(0) + "%";
+      mSettle.textContent = (settle >= T ? ">2.5" : settle.toFixed(2)) + " s";
+      mZeta.textContent = zeta.toFixed(2);
+      draw(null);
+    }
+
+    function draw(progress) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = "rgba(120,170,255,0.08)"; ctx.lineWidth = 1;
+      for (var g = 0; g <= 4; g++) { var yy = Y(g * yMax / 4); ctx.beginPath(); ctx.moveTo(42, yy); ctx.lineTo(W - 22, yy); ctx.stroke(); }
+      ctx.strokeStyle = "rgba(46,230,166,0.55)"; ctx.setLineDash([5, 5]);
+      ctx.beginPath(); ctx.moveTo(42, Y(1)); ctx.lineTo(W - 22, Y(1)); ctx.stroke(); ctx.setLineDash([]);
+      ctx.strokeStyle = "#6db8ff"; ctx.lineWidth = 2; ctx.beginPath();
+      for (var i = 0; i <= N; i++) { var px = X(i * dt), py = Y(data[i]); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }
+      ctx.stroke();
+      if (progress != null) { var idx = Math.min(N, Math.round(progress * N)); ctx.fillStyle = "#2ee6a6"; ctx.beginPath(); ctx.arc(X(idx * dt), Y(data[idx]), 4, 0, 7); ctx.fill(); }
+    }
+
+    var t0 = null;
+    function frame(ts) {
+      if (t0 == null) t0 = ts;
+      var p = ((ts - t0) / 2600) % 1, idx = Math.min(N, Math.round(p * N)), val = data[idx];
+      draw(p);
+      if (block) block.style.left = (Math.max(0, Math.min(1.25, val / sp)) * 80) + "%";
+      requestAnimationFrame(frame);
+    }
+
+    kpEl.addEventListener("input", sim); kdEl.addEventListener("input", sim);
+    sim(); requestAnimationFrame(frame);
+  })();
+  </script>
+
+</body>
+
+</html>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
