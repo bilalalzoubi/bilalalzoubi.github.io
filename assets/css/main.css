@@ -1424,3 +1424,53 @@ body.theme-light .light-background {
 .bio-rate .out { color: #2ee6a6; font-weight: 600; min-width: 66px; text-align: left; }
 .bio-plot { width: 100%; height: auto; display: block; border-radius: 10px; background: rgba(6,16,32,0.55); }
 .bio-caption { margin-top: 14px; font-size: 13px; color: rgba(170,200,240,0.6); text-align: center; }
+
+/*--------------------------------------------------------------
+# Pen plotter (hero)
+--------------------------------------------------------------*/
+.plot-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 16px; }
+.plot-chips button {
+  padding: 6px 15px; border-radius: 50px; border: 1px solid rgba(90,150,230,0.35);
+  background: rgba(13,32,58,0.6); color: #cfe2ff; font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: inherit;
+}
+.plot-chips button.on { border-color: #2ee6a6; color: #2ee6a6; }
+.bio-plot#plotBed { width: 100%; max-width: 460px; margin: 0 auto; }
+.plot-readout { display: flex; gap: 18px; justify-content: center; margin-top: 12px; font-family: var(--nav-font), monospace; font-size: 13px; color: rgba(180,210,255,0.85); }
+.plot-readout .val { color: #2ee6a6; }
+.plot-readout .muted { color: rgba(150,190,255,0.7); }
+
+/*--------------------------------------------------------------
+# Swarm name formation (hero)
+--------------------------------------------------------------*/
+.swarm-input { display: flex; justify-content: center; margin-bottom: 14px; }
+.swarm-input input {
+  width: 260px; max-width: 80%; text-align: center;
+  padding: 10px 16px; border-radius: 50px;
+  border: 1px solid rgba(90,150,230,0.4); background: rgba(13,32,58,0.6);
+  color: #eaf2ff; font-size: 16px; font-family: inherit; outline: none;
+}
+.swarm-input input:focus { border-color: #2ee6a6; }
+.swarm-input input::placeholder { color: rgba(180,210,255,0.5); }
+
+/*--------------------------------------------------------------
+# CNC plotter (hero)
+--------------------------------------------------------------*/
+.cnc-demo {
+  margin: 34px auto 0; padding: 22px; max-width: 720px;
+  border: 1px solid rgba(90,150,230,0.18); border-radius: 16px;
+  background: rgba(10,26,48,0.45);
+}
+.cnc-label {
+  letter-spacing: 3px; text-transform: uppercase; font-size: 13px;
+  color: rgba(180,210,255,0.7); margin-bottom: 16px; text-align: center;
+}
+.cnc-shapes { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; }
+.cnc-shapes button {
+  padding: 6px 15px; border-radius: 50px; border: 1px solid rgba(90,150,230,0.35);
+  background: rgba(13,32,58,0.6); color: #cfe2ff; font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: inherit;
+}
+.cnc-shapes button.on { border-color: #2ee6a6; color: #2ee6a6; }
+.cnc-bed { width: 100%; max-width: 420px; height: auto; display: block; margin: 0 auto; border-radius: 12px; background: rgba(6,16,32,0.6); }
+.cnc-caption { margin-top: 14px; font-size: 13px; color: rgba(170,200,240,0.6); text-align: center; }

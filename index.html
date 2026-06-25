@@ -92,20 +92,12 @@
         <p>I'm a <span class="typed" data-typed-items="Mechatronics Engineering Student, Biomedical Applications, Control Systems, Embedded IoT, Automation">Mechatronics Engineering Student</span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
 
         <div class="bio-demo">
-          <div class="bio-label">Live biosignal monitor</div>
-          <div class="bio-controls">
-            <div class="bio-seg">
-              <button type="button" id="sigEcg" class="on">ECG</button>
-              <button type="button" id="sigEeg">EEG</button>
-            </div>
-            <div class="bio-rate">
-              <i class="bi bi-heart-pulse" id="hicon" aria-hidden="true"></i>
-              <input type="range" id="bpm" min="40" max="180" value="72" step="1" aria-label="Heart rate (BPM)">
-              <span class="out" id="bpmOut">72 BPM</span>
-            </div>
+          <div class="bio-label">Type a word &mdash; the swarm forms it</div>
+          <div class="swarm-input">
+            <input id="swarmWord" type="text" maxlength="14" value="Bilal" aria-label="Word for the swarm to form" autocomplete="off">
           </div>
-          <canvas class="bio-plot" id="bioPlot" width="660" height="180"></canvas>
-          <div class="bio-caption">A live biosignal monitor &mdash; a nod to NeuroGuard (in-ear EEG) and my interest in ECG &amp; cardiac monitoring.</div>
+          <canvas class="bio-plot" id="swarmCanvas" width="660" height="200"></canvas>
+          <div class="bio-caption">A swarm of lights that self-arranges into any word &mdash; a nod to swarm robotics &amp; multi-agent systems. Try typing your name.</div>
         </div>
       </div>
 
@@ -600,35 +592,45 @@
   })();
   </script>
 
-  <!-- Live biosignal monitor -->
+  <!-- Swarm name formation -->
   <script>
   (function () {
-    var cv = document.getElementById("bioPlot");
+    var cv = document.getElementById("swarmCanvas");
     if (!cv) return;
     var ctx = cv.getContext("2d"), W = cv.width, H = cv.height;
-    var bpmEl = document.getElementById("bpm"), bpmOut = document.getElementById("bpmOut"), hicon = document.getElementById("hicon");
-    var bEcg = document.getElementById("sigEcg"), bEeg = document.getElementById("sigEeg"), mode = "ecg";
-    if (bEcg) bEcg.addEventListener("click", function () { mode = "ecg"; bEcg.classList.add("on"); bEeg.classList.remove("on"); });
-    if (bEeg) bEeg.addEventListener("click", function () { mode = "eeg"; bEeg.classList.add("on"); bEcg.classList.remove("on"); });
-    if (bpmEl) bpmEl.addEventListener("input", function () { bpmOut.textContent = bpmEl.value + " BPM"; });
-    function gauss(x, m, s) { return Math.exp(-((x - m) * (x - m)) / (2 * s * s)); }
-    function ecgWave(p) { var y = 0; y += 0.10 * gauss(p, 0.18, 0.025); y -= 0.06 * gauss(p, 0.37, 0.010); y += 0.85 * gauss(p, 0.40, 0.010); y -= 0.18 * gauss(p, 0.43, 0.012); y += 0.22 * gauss(p, 0.62, 0.045); return y; }
-    function eegWave(p, t) { return 0.32 * Math.sin(2 * Math.PI * p * 6) + 0.18 * Math.sin(2 * Math.PI * p * 11 + t) + 0.10 * Math.sin(2 * Math.PI * p * 19 + t * 1.7); }
-    var pxPerSec = 150, mid = H * 0.52, amp = H * 0.40, start = null;
-    function draw(now) {
-      ctx.clearRect(0, 0, W, H);
-      ctx.strokeStyle = "rgba(120,170,255,0.07)"; ctx.lineWidth = 1;
-      for (var gx = 0; gx <= W; gx += 40) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke(); }
-      for (var gy = 0; gy <= H; gy += 30) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke(); }
-      var bpm = +bpmEl.value, cycle = 60 / bpm;
-      ctx.strokeStyle = mode === "ecg" ? "#2ee6a6" : "#6db8ff"; ctx.lineWidth = 2; ctx.beginPath();
-      for (var x = 0; x < W; x++) { var t = now - (W - x) / pxPerSec; var ph = ((t / cycle) % 1 + 1) % 1; var vv = mode === "ecg" ? ecgWave(ph) : eegWave(ph, t * 2); var y = mid - vv * amp; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
-      ctx.stroke();
-      var phR = ((now / cycle) % 1 + 1) % 1, lead = mode === "ecg" ? ecgWave(phR) : eegWave(phR, now * 2);
-      ctx.fillStyle = mode === "ecg" ? "#aaffe0" : "#bcd8ff"; ctx.beginPath(); ctx.arc(W - 1, mid - lead * amp, 3.5, 0, 7); ctx.fill();
-      if (hicon) hicon.style.transform = "scale(" + (1 + 0.32 * Math.max(0, ecgWave(phR))).toFixed(3) + ")";
+    var off = document.createElement("canvas"), oc = off.getContext("2d");
+    off.width = W; off.height = H;
+    function sample(text) {
+      oc.clearRect(0, 0, W, H); oc.fillStyle = "#fff"; oc.textAlign = "center"; oc.textBaseline = "middle";
+      var fs = 150; oc.font = "700 " + fs + "px Arial";
+      while (oc.measureText(text).width > W * 0.86 && fs > 24) { fs -= 4; oc.font = "700 " + fs + "px Arial"; }
+      oc.fillText(text, W / 2, H / 2);
+      var d = oc.getImageData(0, 0, W, H).data, pts = [], step = 4;
+      for (var y = 0; y < H; y += step) for (var x = 0; x < W; x += step) { if (d[(y * W + x) * 4 + 3] > 128) pts.push({ x: x, y: y }); }
+      for (var i = pts.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = pts[i]; pts[i] = pts[j]; pts[j] = t; }
+      if (pts.length > 720) pts = pts.slice(0, 720);
+      return pts;
     }
-    function frame(ts) { if (start == null) start = ts; draw((ts - start) / 1000); requestAnimationFrame(frame); }
+    var parts = [];
+    function setText(text) {
+      var pts = sample(text && text.trim() ? text : " ");
+      while (parts.length < pts.length) parts.push({ x: Math.random() * W, y: Math.random() * H, c: Math.random() < 0.5 ? "#2ee6a6" : "#6db8ff", s: 0.8 + Math.random() * 1.6 });
+      parts.length = pts.length;
+      for (var i = 0; i < parts.length; i++) { parts[i].tx = pts[i].x; parts[i].ty = pts[i].y; }
+    }
+    function frame() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i];
+        p.x += (p.tx - p.x) * 0.085 + (Math.random() - 0.5) * 0.7;
+        p.y += (p.ty - p.y) * 0.085 + (Math.random() - 0.5) * 0.7;
+        ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, 7); ctx.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+    var inp = document.getElementById("swarmWord");
+    if (inp) inp.addEventListener("input", function () { setText(this.value); });
+    setText(inp ? inp.value : "Bilal");
     requestAnimationFrame(frame);
   })();
   </script>
