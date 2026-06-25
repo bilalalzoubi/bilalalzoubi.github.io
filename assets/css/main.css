@@ -1454,6 +1454,30 @@ body.theme-light .light-background {
 .swarm-input input::placeholder { color: rgba(180,210,255,0.5); }
 
 /*--------------------------------------------------------------
+# Project icon covers (no photo needed)
+--------------------------------------------------------------*/
+.portfolio .project-cover {
+  position: relative; height: 260px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #0c1b2e, #0a1422);
+}
+.portfolio .project-cover i { font-size: 60px; opacity: 0.92; transition: transform 0.4s; }
+.portfolio .portfolio-content:hover .project-cover i { transform: scale(1.12); }
+.portfolio .project-cover .cover-tag {
+  position: absolute; top: 14px; left: 14px;
+  font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 4px 11px; border-radius: 50px; background: rgba(255,255,255,0.06);
+}
+.portfolio .project-cover.cover-bio { background: linear-gradient(135deg, #0c2b24, #0a1626); }
+.portfolio .project-cover.cover-bio i, .portfolio .project-cover.cover-bio .cover-tag { color: #2ee6a6; }
+.portfolio .project-cover.cover-robotics { background: linear-gradient(135deg, #0d2238, #0a1626); }
+.portfolio .project-cover.cover-robotics i, .portfolio .project-cover.cover-robotics .cover-tag { color: #6db8ff; }
+.portfolio .project-cover.cover-iot { background: linear-gradient(135deg, #0a2a2e, #0a1626); }
+.portfolio .project-cover.cover-iot i, .portfolio .project-cover.cover-iot .cover-tag { color: #38d9c9; }
+.portfolio .project-cover.cover-power { background: linear-gradient(135deg, #2a210c, #0a1626); }
+.portfolio .project-cover.cover-power i, .portfolio .project-cover.cover-power .cover-tag { color: #f0b252; }
+
+/*--------------------------------------------------------------
 # CNC plotter (hero)
 --------------------------------------------------------------*/
 .cnc-demo {
